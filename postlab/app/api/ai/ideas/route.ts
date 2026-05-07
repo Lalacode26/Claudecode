@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     const { topic, category } = await request.json()
     if (!topic) return NextResponse.json({ error: 'topic required' }, { status: 400 })
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
     const prompt = `Bạn là content strategist chuyên nghiệp cho fanpage trung tâm dạy lập trình tại Việt Nam.
 
