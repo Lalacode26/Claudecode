@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Native C++ Bootcamp — Hè 2026 cho sinh viên năm nhất | CodeGym</title>
+<meta name="description" content="Khoá học AI-Native C++ Bootcamp dành cho sinh viên năm nhất các trường công nghệ. 48 giờ học thực chiến, mentor 1-1, code 5+ dự án thật, tích hợp AI workflow. Khai giảng 26/05/2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  color: #1a1a2e;
+  background: #fff;
+  overflow-x: hidden;
+  line-height: 1.65;
+}
+
+/* ── TOKENS ── */
+:root {
+  --cg-navy:   #282781;
+  --cg-orange: #f15a29;
+  --cg-orange-d: #d94a1c;
+  --cg-light:  #f0f2ff;
+  --cg-soft:   #f8f9ff;
+  --cg-border: #e2e5f0;
+  --text-main: #1a1a2e;
+  --text-muted:#6b7280;
+  --white:     #ffffff;
+  --max: 1100px;
+  --radius: 14px;
+  --shadow: 0 4px 24px rgba(40,39,129,.10);
+  --shadow-lg: 0 12px 48px rgba(40,39,129,.16);
+}
+
+/* ── UTILITIES ── */
+.container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+.tag {
+  display: inline-block;
+  background: rgba(241,90,41,.12);
+  color: var(--cg-orange);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+  margin-bottom: 14px;
+}
+.tag--blue {
+  background: rgba(40,39,129,.10);
+  color: var(--cg-navy);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 8px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: all .22s ease;
+}
+.btn-primary {
+  background: var(--cg-orange); color: #fff;
+}
+.btn-primary:hover { background: var(--cg-orange-d); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(241,90,41,.35); }
+.btn-outline {
+  background: transparent; color: var(--cg-navy);
+  border: 2px solid var(--cg-navy);
+}
+.btn-outline:hover { background: var(--cg-navy); color: #fff; transform: translateY(-2px); }
+.btn-white {
+  background: #fff; color: var(--cg-navy);
+}
+.btn-white:hover { background: var(--cg-light); transform: translateY(-2px); }
+.section-title {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800; line-height: 1.22;
+  color: var(--cg-navy);
+}
+.section-sub {
+  font-size: 16px; color: var(--text-muted);
+  margin-top: 12px; max-width: 580px;
+}
+
+/* ── URGENCY BAR ── */
+.urgency-bar {
+  background: var(--cg-orange);
+  color: #fff;
+  text-align: center;
+  padding: 10px 24px;
+  font-size: 14px; font-weight: 600;
+  letter-spacing: .02em;
+}
+.urgency-bar a { color: #fff; text-decoration: underline; }
+
+/* ── HEADER ── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cg-border);
+  padding: 14px 0;
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-size: 22px; font-weight: 900;
+  text-decoration: none; letter-spacing: -.02em;
+}
+.logo span:first-child { color: var(--cg-navy); }
+.logo span:last-child  { color: var(--cg-orange); }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(145deg, #0c0b4a 0%, #1a1968 35%, #282781 68%, #1a3a7c 100%);
+  padding: 88px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 88% 25%, rgba(241,90,41,.22) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 70% at 5% 85%, rgba(100,90,220,.13) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none; z-index: 0;
+}
+.hero-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); pointer-events: none; z-index: 0;
+}
+.hero-orb-1 {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(241,90,41,.22) 0%, transparent 70%);
+  top: -120px; right: -60px;
+  animation: orbFloat 9s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(90,80,210,.18) 0%, transparent 70%);
+  bottom: 40px; left: -30px;
+  animation: orbFloat 11s ease-in-out infinite 2s;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0); }
+  40%  { transform: translate(18px,-22px); }
+  70%  { transform: translate(-12px,-8px); }
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 500px; gap: 48px;
+  align-items: start;
+  position: relative; z-index: 1;
+  padding-bottom: 64px;
+}
+.hero-right {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.hero-right .hero-cta { margin-bottom: 0; }
+.hero-right .hero-cta .btn { flex: 1; justify-content: center; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.18);
+  border-radius: 50px; padding: 6px 14px 6px 8px; margin-bottom: 20px;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.88);
+}
+.hero-badge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.22);
+  animation: livePulse 2s ease-in-out infinite; flex-shrink: 0;
+}
+@keyframes livePulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,.22); }
+  50% { box-shadow: 0 0 0 7px rgba(74,222,128,.07); }
+}
+.hero-badge strong { color: #fff; }
+.hero-h1 {
+  font-size: clamp(32px, 4.8vw, 54px);
+  font-weight: 900; line-height: 1.1;
+  color: #fff; margin-bottom: 20px; letter-spacing: -.025em;
+}
+.hero-h1 em {
+  font-style: normal;
+  background: linear-gradient(95deg, #f15a29 0%, #ff8c5a 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  font-size: 16px; line-height: 1.78;
+  color: rgba(255,255,255,.76); max-width: 500px; margin-bottom: 24px;
+}
+.hero-countdown {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 24px;
+}
+.countdown-label { font-size: 12px; color: rgba(255,255,255,.68); font-weight: 600; white-space: nowrap; }
+.countdown-slots { display: flex; align-items: center; gap: 4px; }
+.cds {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.1); border-radius: 6px; padding: 4px 8px; min-width: 36px;
+}
+.cds span { font-size: 16px; font-weight: 900; color: #fff; line-height: 1; font-variant-numeric: tabular-nums; }
+.cds small { font-size: 9px; color: rgba(255,255,255,.45); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-top: 1px; }
+.cds-sep { color: rgba(255,255,255,.35); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.hero-meta-item {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; padding: 7px 12px;
+  color: rgba(255,255,255,.9); font-size: 13px; font-weight: 600;
+  transition: background .2s, border-color .2s;
+}
+.hero-meta-item:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.2); }
+.hero-meta-item span { font-size: 15px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.btn-primary-shimmer { position: relative; overflow: hidden; }
+.btn-primary-shimmer::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  animation: btnShimmer 3.5s ease-in-out infinite 1.5s;
+}
+@keyframes btnShimmer {
+  0%   { left: -100%; }
+  45%  { left: 150%; }
+  100% { left: 150%; }
+}
+.hero-social-proof {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(255,255,255,.68); font-weight: 500; margin-bottom: 4px;
+}
+.hero-avatars { display: flex; }
+.hero-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cg-orange), var(--cg-orange-d));
+  border: 2px solid rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; margin-left: -6px;
+}
+.hero-avatar:first-child { margin-left: 0; }
+.hero-social-proof strong { color: #fff; }
+.hero-promo {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 16px;
+  background: linear-gradient(90deg, rgba(241,90,41,.18), rgba(241,90,41,.08));
+  border: 1px solid rgba(241,90,41,.42); border-radius: 50px;
+  padding: 10px 18px 10px 14px; color: #fff; font-size: 13px; font-weight: 600;
+  position: relative; overflow: hidden; animation: promoShine 3s ease-in-out infinite;
+}
+.hero-promo::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  animation: shineSweep 4s ease-in-out infinite;
+}
+@keyframes promoShine {
+  0%,100% { box-shadow: 0 0 0 0 rgba(241,90,41,.35); }
+  50%     { box-shadow: 0 0 0 8px rgba(241,90,41,0); }
+}
+@keyframes shineSweep {
+  0%   { left: -100%; } 60%  { left: 200%; } 100% { left: 200%; }
+}
+.hero-promo-icon {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--cg-orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(241,90,41,.5);
+}
+.hero-promo strong { color: var(--cg-orange); font-weight: 800; margin: 0 2px; }
+.hero-promo-divider { color: rgba(255,255,255,.3); margin: 0 4px; }
+
+/* Code card */
+.code-card {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 28px 72px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04), inset 0 1px 0 rgba(255,255,255,.06);
+  transform: perspective(900px) rotateY(-5deg) rotateX(3deg);
+  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.code-card:hover { transform: perspective(900px) rotateY(-1deg) rotateX(0); }
+.code-header {
+  background: #161b22; padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #ffbd2e; }
+.dot-g { background: #28c940; }
+.code-filename {
+  margin-left: 8px; color: rgba(255,255,255,.42);
+  font-size: 12px; font-family: 'Be Vietnam Pro', monospace;
+}
+.code-body {
+  padding: 20px 24px;
+  font-family: 'Be Vietnam Pro', monospace;
+  font-size: 13px; line-height: 1.9;
+}
+.code-line { display: flex; gap: 14px; align-items: baseline; }
+.c-ln {
+  color: rgba(255,255,255,.18); user-select: none;
+  font-size: 11px; min-width: 14px; text-align: right;
+  line-height: 1.9; flex-shrink: 0;
+}
+.c-comment { color: #6a737d; }
+.c-key   { color: #f97583; }
+.c-inc   { color: #79b8ff; }
+.c-ns    { color: #b392f0; }
+.c-fn    { color: #85e89d; }
+.c-str   { color: #9ecbff; }
+.c-plain { color: #e1e4e8; }
+.c-out   { color: var(--cg-orange); font-weight: 700; }
+.code-cursor {
+  display: inline-block; width: 2px; height: .82em;
+  background: var(--cg-orange); vertical-align: text-bottom;
+  margin-left: 1px; animation: blink .9s step-end infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.code-footer {
+  padding: 10px 24px 18px;
+  display: flex; align-items: center; gap: 8px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.code-ai-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(241,90,41,.12); border: 1px solid rgba(241,90,41,.28);
+  border-radius: 6px; padding: 4px 10px;
+  color: var(--cg-orange); font-size: 11px; font-weight: 700; letter-spacing: .04em;
+}
+
+/* ── INSIGHT BAR ── */
+.insight-bar {
+  background: var(--cg-navy);
+  padding: 14px 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: rgba(255,255,255,.88);
+  font-size: 13px; font-weight: 600;
+  padding: 0 32px;
+  flex-shrink: 0;
+}
+.marquee-sep { color: rgba(255,255,255,.25); }
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── PAIN SECTION ── */
+.pain-section { padding: 96px 0; background: var(--white); }
+.pain-headline {
+  text-align: center;
+  font-size: clamp(22px, 3.5vw, 34px);
+  font-weight: 800; color: var(--cg-navy);
+  margin-bottom: 52px;
+}
+.pain-headline em { font-style: normal; color: var(--cg-orange); }
+.pain-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  grid-template-rows: auto auto;
+}
+.pain-card {
+  background: var(--cg-soft);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  transition: all .25s ease;
+  position: relative; overflow: hidden;
+}
+.pain-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cg-navy), var(--cg-orange));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .3s ease;
+}
+.pain-card:hover::before { transform: scaleX(1); }
+.pain-card:hover { border-color: rgba(40,39,129,.2); box-shadow: var(--shadow); transform: translateY(-3px); }
+.pain-card:last-child:nth-child(3n-1), .pain-card:last-child:nth-child(2) {
+  grid-column: span 1;
+}
+.pain-emoji { font-size: 32px; margin-bottom: 12px; }
+.pain-title { font-size: 15px; font-weight: 700; color: var(--cg-navy); margin-bottom: 8px; }
+.pain-desc  { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+/* ── SOLUTION ── */
+.solution-section {
+  padding: 96px 0;
+  background: linear-gradient(180deg, #f0f2ff 0%, #ffffff 100%);
+}
+.solution-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  align-items: center;
+}
+.solution-list { list-style: none; margin: 28px 0 36px; }
+.solution-list li {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 0; border-bottom: 1px solid var(--cg-border);
+}
+.solution-list li:last-child { border-bottom: none; }
+.sol-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(241,90,41,.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.sol-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--cg-navy); margin-bottom: 3px; }
+.sol-text span { font-size: 14px; color: var(--text-muted); }
+.stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--cg-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.stat-num { font-size: 32px; font-weight: 900; color: var(--cg-orange); line-height: 1; }
+.stat-label { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
+
+/* ── CURRICULUM ── */
+.curriculum-section { padding: 96px 0; background: var(--white); }
+.module-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-top: 48px;
+}
+.module-card {
+  background: var(--cg-soft);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all .25s ease;
+}
+.module-card:hover { border-color: var(--cg-orange); box-shadow: var(--shadow); transform: translateY(-3px); }
+.module-card.highlight {
+  background: linear-gradient(135deg, var(--cg-navy) 0%, #1a3a8c 100%);
+  color: #fff; border-color: transparent;
+}
+.module-card.highlight .mod-num { color: var(--cg-orange); }
+.module-card.highlight .mod-title { color: #fff; }
+.module-card.highlight .mod-desc { color: rgba(255,255,255,.75); }
+.mod-num { font-size: 11px; font-weight: 800; color: var(--cg-orange); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.mod-title { font-size: 14px; font-weight: 700; color: var(--cg-navy); margin-bottom: 6px; line-height: 1.35; }
+.mod-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+.curriculum-cta {
+  text-align: center; margin-top: 40px;
+  padding: 24px; background: var(--cg-soft); border-radius: var(--radius);
+  border: 1px dashed var(--cg-orange);
+}
+
+/* ── USP ── */
+.usp-section { padding: 96px 0; background: var(--cg-soft); }
+.usp-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 52px;
+}
+.usp-card {
+  background: #fff; border: 1px solid var(--cg-border);
+  border-radius: var(--radius); padding: 32px 28px;
+  transition: all .25s ease;
+}
+.usp-card:hover { border-color: var(--cg-navy); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.usp-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--cg-navy), #1a3a8c);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 18px;
+}
+.usp-card h3 { font-size: 16px; font-weight: 800; color: var(--cg-navy); margin-bottom: 10px; }
+.usp-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+/* ── OUTPUT ── */
+.output-section { padding: 96px 0; background: #fff; }
+.output-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 52px;
+}
+.output-card {
+  border-radius: var(--radius); padding: 36px 28px;
+  border: 1px solid var(--cg-border);
+  transition: all .25s ease; overflow: hidden; position: relative;
+}
+.output-card::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--cg-navy), var(--cg-orange));
+  opacity: 0; transition: opacity .25s ease;
+}
+.output-card:hover::after { opacity: 1; }
+.output-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.out-num { font-size: 48px; font-weight: 900; color: var(--cg-border); line-height: 1; margin-bottom: 12px; }
+.out-title { font-size: 18px; font-weight: 800; color: var(--cg-navy); margin-bottom: 8px; }
+.out-sub   { font-size: 14px; color: var(--cg-orange); font-weight: 600; margin-bottom: 18px; }
+.out-list  { list-style: none; }
+.out-list li {
+  font-size: 14px; color: var(--text-muted); padding: 7px 0;
+  border-bottom: 1px solid var(--cg-border);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.out-list li:last-child { border-bottom: none; }
+.out-list li::before { content: '✓'; color: var(--cg-orange); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+/* ── MENTOR ── */
+.mentor-section { padding: 96px 0; background: var(--cg-soft); }
+.mentor-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 52px;
+}
+.mentor-card {
+  background: #fff; border: 1px solid var(--cg-border);
+  border-radius: var(--radius); padding: 32px 28px;
+  transition: all .25s ease;
+  text-align: center;
+}
+.mentor-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--cg-navy); }
+.mentor-icon-wrap {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--cg-navy), var(--cg-orange));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; margin: 0 auto 20px;
+}
+.mentor-card h3 { font-size: 16px; font-weight: 800; color: var(--cg-navy); margin-bottom: 10px; }
+.mentor-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+/* ── TESTIMONIAL ── */
+.testimonial-section { padding: 96px 0; background: var(--white); }
+.testi-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  margin-top: 52px;
+}
+.testi-card {
+  background: var(--cg-soft); border: 1px solid var(--cg-border);
+  border-radius: var(--radius); padding: 32px 28px;
+  transition: all .25s ease; position: relative;
+}
+.testi-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+.testi-quote {
+  font-size: 48px; line-height: .8; color: var(--cg-orange);
+  font-family: Georgia, serif; margin-bottom: 14px;
+}
+.testi-text {
+  font-size: 14px; color: var(--text-main);
+  line-height: 1.75; font-style: italic; margin-bottom: 20px;
+}
+.testi-author { font-size: 13px; font-weight: 700; color: var(--cg-navy); }
+.testi-role   { font-size: 12px; color: var(--text-muted); }
+
+/* ── PRICING ── */
+.pricing-section { padding: 96px 0; background: linear-gradient(180deg, #f0f2ff 0%, #fff 100%); }
+.pricing-inner {
+  display: grid; grid-template-columns: 1fr 420px; gap: 48px;
+  align-items: flex-start;
+}
+.pricing-card {
+  background: #fff; border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--cg-navy);
+  overflow: hidden;
+}
+.pricing-badge {
+  background: linear-gradient(90deg, var(--cg-navy), #1a3a8c);
+  color: #fff; padding: 14px 28px;
+  font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.badge-pill {
+  background: var(--cg-orange); color: #fff;
+  font-size: 11px; font-weight: 800;
+  padding: 4px 10px; border-radius: 12px;
+  letter-spacing: .05em;
+}
+.pricing-body { padding: 28px; }
+.pricing-course-name { font-size: 22px; font-weight: 900; color: var(--cg-navy); margin-bottom: 6px; }
+.pricing-tagline { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+.pricing-rows { border-radius: 10px; overflow: hidden; border: 1px solid var(--cg-border); }
+.pricing-row {
+  display: flex; align-items: flex-start;
+  padding: 12px 16px; gap: 12px;
+  border-bottom: 1px solid var(--cg-border);
+  font-size: 14px;
+}
+.pricing-row:last-child { border-bottom: none; }
+.p-label { color: var(--text-muted); font-weight: 600; white-space: nowrap; min-width: 130px; }
+.p-value { color: var(--text-main); font-weight: 500; }
+.p-value strong { color: var(--cg-orange); }
+.pricing-uu {
+  background: linear-gradient(135deg, var(--cg-orange) 0%, var(--cg-orange-d) 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 22px 20px;
+  margin-top: 22px;
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(241,90,41,.3);
+}
+.pricing-uu::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,.18) 0%, transparent 50%);
+  animation: uuPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes uuPulse {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50%      { transform: scale(1.1); opacity: .4; }
+}
+.uu-ribbon {
+  position: absolute;
+  top: 10px; right: -32px;
+  background: #fff;
+  color: var(--cg-orange);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .1em;
+  padding: 3px 36px;
+  transform: rotate(35deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.uu-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.2));
+}
+.uu-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255,255,255,.95);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin-bottom: 6px;
+  position: relative;
+}
+.uu-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  position: relative;
+  text-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.uu-value-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,.9);
+  display: block;
+  margin-top: 4px;
+  position: relative;
+}
+.uu-deadline {
+  font-size: 12px;
+  color: #fff;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255,255,255,.35);
+  font-weight: 600;
+  position: relative;
+}
+.uu-deadline strong {
+  color: #fff;
+  font-weight: 800;
+  background: rgba(255,255,255,.15);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 4px;
+}
+.pricing-cta-group { display: flex; flex-direction: column; gap: 12px; }
+.pricing-cta-group .btn { width: 100%; justify-content: center; }
+.pricing-cam {
+  text-align: center; margin-top: 16px;
+  font-size: 13px; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.pricing-cam span { color: var(--cg-orange); font-size: 16px; }
+
+/* FORM */
+.form-side { padding-top: 8px; }
+.form-title { font-size: 22px; font-weight: 800; color: var(--cg-navy); margin-bottom: 8px; }
+.form-sub   { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--cg-navy); margin-bottom: 6px; }
+.form-group input,
+.form-group select {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--cg-border);
+  border-radius: 8px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px; color: var(--text-main);
+  background: var(--cg-soft);
+  transition: border-color .2s ease;
+  appearance: none;
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: none; border-color: var(--cg-navy);
+  background: #fff;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-submit { width: 100%; padding: 15px; margin-top: 4px; justify-content: center; font-size: 16px; }
+
+/* Google Form iframe wrapper */
+.gform-wrap {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--cg-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(40,39,129,.06);
+  min-height: 600px;
+}
+.gform-wrap iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+.gform-wrap::before {
+  content: '⏳ Đang tải form...';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-muted);
+  font-size: 14px;
+  z-index: 0;
+}
+.gform-wrap iframe { position: relative; z-index: 1; }
+.form-note { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 12px; }
+
+/* ── FAQ ── */
+.faq-section { padding: 96px 0; background: var(--white); }
+.faq-list { margin-top: 52px; max-width: 760px; margin-left: auto; margin-right: auto; }
+.faq-item {
+  border: 1px solid var(--cg-border); border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 12px;
+  transition: box-shadow .2s ease;
+}
+.faq-item:hover { box-shadow: var(--shadow); }
+.faq-q {
+  width: 100%; background: none; border: none;
+  padding: 20px 24px; text-align: left; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--cg-navy);
+  transition: background .2s ease;
+}
+.faq-q:hover { background: var(--cg-soft); }
+.faq-q.open { background: var(--cg-soft); }
+.faq-arrow {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(40,39,129,.08);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 16px; transition: transform .25s ease;
+}
+.faq-q.open .faq-arrow { transform: rotate(180deg); background: var(--cg-navy); color: #fff; }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height .35s ease, padding .25s ease;
+  padding: 0 24px;
+}
+.faq-a.open { max-height: 300px; padding: 4px 24px 20px; }
+.faq-a p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 96px 0;
+  background: linear-gradient(135deg, var(--cg-navy) 0%, #1a3a8c 100%);
+  text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(241,90,41,.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.final-cta h2 {
+  font-size: clamp(30px, 5vw, 52px); font-weight: 900;
+  color: #fff; line-height: 1.15; margin-bottom: 16px;
+  position: relative;
+}
+.final-cta h2 em { font-style: normal; color: var(--cg-orange); }
+.final-cta p { color: rgba(255,255,255,.78); font-size: 16px; margin-bottom: 36px; position: relative; }
+.final-cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; }
+
+/* ── FOOTER ── */
+.footer {
+  background: #0d0d1f; color: rgba(255,255,255,.7);
+  padding: 56px 0 24px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr; gap: 64px;
+  margin-bottom: 48px;
+}
+.footer-logo { font-size: 20px; font-weight: 900; margin-bottom: 14px; }
+.footer-logo span:first-child { color: #fff; }
+.footer-logo span:last-child  { color: var(--cg-orange); }
+.footer-desc { font-size: 14px; line-height: 1.7; margin-bottom: 18px; }
+.footer-hotline { font-size: 14px; }
+.footer-hotline strong { color: #fff; }
+.footer-col h4 { color: #fff; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: rgba(255,255,255,.65); font-size: 14px; text-decoration: none; transition: color .2s; }
+.footer-col ul li a:hover { color: var(--cg-orange); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 24px; text-align: center;
+  font-size: 13px; color: rgba(255,255,255,.4);
+}
+
+/* ── FLOAT CTA ── */
+.float-cta {
+  position: fixed; bottom: 28px; right: 24px; z-index: 99;
+  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+}
+.float-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 50px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 13px; font-weight: 700;
+  text-decoration: none; cursor: pointer; border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  transition: all .22s ease;
+  white-space: nowrap;
+}
+.float-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.3); }
+.float-btn-primary { background: var(--cg-orange); color: #fff; }
+.float-btn-mess    { background: #fff; color: var(--cg-navy); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate { opacity: 0; }
+.animate.visible { animation: fadeUp .6s ease forwards; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero-grid, .solution-grid, .pricing-inner { grid-template-columns: 1fr; }
+  .hero-grid { padding-bottom: 40px; }
+  .hero-orb { display: none; }
+  .code-card { display: none; }
+  .usp-grid, .output-grid, .mentor-grid, .testi-grid { grid-template-columns: 1fr 1fr; }
+  .module-grid { grid-template-columns: repeat(2, 1fr); }
+  .pain-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .usp-grid, .output-grid, .mentor-grid, .testi-grid, .pain-grid { grid-template-columns: 1fr; }
+  .module-grid { grid-template-columns: 1fr 1fr; }
+  .hero-meta { flex-direction: column; }
+  .hero-countdown { flex-wrap: wrap; gap: 8px; }
+  .float-cta { bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- URGENCY BAR -->
+<div class="urgency-bar">
+  🔥 Khai giảng <strong>26/05/2026</strong> — Đăng ký trước <strong>20/05</strong> để nhận ưu đãi 5% học phí
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="#" class="logo"><span>Code</span><span>Gym</span></a>
+      <a href="#dang-ky" class="btn btn-primary">Đăng ký tư vấn →</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Khai giảng <strong>26/05/2026</strong> · Đang nhận đăng ký
+        </div>
+        <h1 class="hero-h1">
+          Năm nhất sắp kết thúc —<br>
+          Bạn đã sẵn sàng<br>
+          <em>vượt lên trong năm 2?</em>
+        </h1>
+        <p class="hero-sub">
+          Đừng để mùa hè trôi qua vô nghĩa. Khóa AI-Native C++ giúp bạn nắm vững nền tảng lập trình, xây dựng dự án thực tế và ứng dụng AI workflow để code nhanh hơn, hiệu quả hơn.
+        </p>
+        <div class="hero-countdown">
+          <span class="countdown-label">⏰ Ưu đãi 5% kết thúc sau:</span>
+          <div class="countdown-slots">
+            <div class="cds"><span id="cd-d">14</span><small>ngày</small></div>
+            <div class="cds-sep">:</div>
+            <div class="cds"><span id="cd-h">00</span><small>giờ</small></div>
+            <div class="cds-sep">:</div>
+            <div class="cds"><span id="cd-m">00</span><small>phút</small></div>
+            <div class="cds-sep">:</div>
+            <div class="cds"><span id="cd-s">00</span><small>giây</small></div>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item"><span>⏱</span> 2 tháng · 48 giờ học thực chiến</div>
+          <div class="hero-meta-item"><span>🤖</span> 13 module · Tích hợp AI</div>
+          <div class="hero-meta-item"><span>👨‍🏫</span> Mentor đồng hành & hỗ trợ</div>
+        </div>
+      </div>
+      <!-- Code card + CTA -->
+      <div class="hero-right">
+        <div class="code-card">
+        <div class="code-header">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="code-filename">main.cpp · ngày 1 của hè</span>
+        </div>
+        <div class="code-body">
+          <div class="code-line"><span class="c-ln">1</span><span class="c-comment">// Hè 2026 — start over.</span></div>
+          <div class="code-line"><span class="c-ln">2</span><div><span class="c-key">#include</span> <span class="c-inc">&lt;iostream&gt;</span></div></div>
+          <div class="code-line"><span class="c-ln">3</span><div><span class="c-ns">using namespace</span> <span class="c-plain">std;</span></div></div>
+          <div class="code-line"><span class="c-ln">4</span><span>&nbsp;</span></div>
+          <div class="code-line"><span class="c-ln">5</span><div><span class="c-fn">int</span> <span class="c-fn">main</span><span class="c-plain">() {</span></div></div>
+          <div class="code-line"><span class="c-ln">6</span><div>&nbsp;&nbsp;<span class="c-plain">cout</span> <span class="c-plain">&lt;&lt;</span> <span class="c-str">"Năm 2, mình sẽ khác!"</span><span class="c-plain">;</span></div></div>
+          <div class="code-line"><span class="c-ln">7</span><div>&nbsp;&nbsp;<span class="c-ns">return</span> <span class="c-str">0</span><span class="c-plain">;</span></div></div>
+          <div class="code-line"><span class="c-ln">8</span><span class="c-plain">}</span></div>
+          <div class="code-line"><span class="c-ln">9</span><span>&nbsp;</span></div>
+          <div class="code-line"><span class="c-ln">10</span><div><span class="c-out">// → Output: bạn của 3 tháng sau 🔥</span><span class="code-cursor"></span></div></div>
+        </div>
+        <div class="code-footer">
+          <div class="code-ai-badge">🤖 AI Suggested · Accepted</div>
+        </div>
+        </div>
+        <div class="hero-cta">
+          <a href="#dang-ky" class="btn btn-primary btn-primary-shimmer">ĐĂNG KÝ TƯ VẤN MIỄN PHÍ →</a>
+          <a href="https://m.me/codegym.vn" class="btn btn-white">💬 Chat ngay với mentor</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT BAR -->
+<div class="insight-bar">
+  <div class="marquee-track">
+    <!-- duplicated for seamless loop -->
+    <span class="marquee-item"><span>📅</span> Hè là thời điểm vàng để bứt phá và đi trước một bước</span>
+    <span class="marquee-item marquee-sep">✦</span>
+    <span class="marquee-item"><span>💼</span> 80% sinh viên chưa tự tin làm dự án sau năm nhất</span>
+    <span class="marquee-item marquee-sep">✦</span>
+    <span class="marquee-item"><span>🤖</span> Lập trình viên biết dùng AI = Lợi thế cạnh tranh tuyệt đối</span>
+    <span class="marquee-item marquee-sep">✦</span>
+    <span class="marquee-item"><span>📅</span> Hè là thời điểm vàng để bứt phá và đi trước một bước</span>
+    <span class="marquee-item marquee-sep">✦</span>
+    <span class="marquee-item"><span>💼</span> 80% sinh viên chưa tự tin làm dự án sau năm nhất</span>
+    <span class="marquee-item marquee-sep">✦</span>
+    <span class="marquee-item"><span>🤖</span> Lập trình viên biết dùng AI = Lợi thế cạnh tranh tuyệt đối</span>
+    <span class="marquee-item marquee-sep">✦</span>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section class="pain-section">
+  <div class="container">
+    <h2 class="pain-headline animate">Sau 1 năm học đại học,<br><em>bạn đã code được gì chưa?</em></h2>
+    <div class="pain-grid">
+      <div class="pain-card animate">
+        <div class="pain-emoji">😵‍💫</div>
+        <div class="pain-title">Ngợp lý thuyết trên trường</div>
+        <p class="pain-desc">Học nhập môn nhưng không hiểu code chạy thế nào, bài tập xong là quên ngay.</p>
+      </div>
+      <div class="pain-card animate">
+        <div class="pain-emoji">📺</div>
+        <div class="pain-title">"Lạc lối" giữa tài liệu miễn phí</div>
+        <p class="pain-desc">Xem nhiều video nhưng vẫn không biết bắt đầu dự án đầu tiên từ đâu.</p>
+      </div>
+      <div class="pain-card animate">
+        <div class="pain-emoji">😨</div>
+        <div class="pain-title">Ám ảnh với "Con trỏ" và "OOP"</div>
+        <p class="pain-desc">GitHub trắng tinh sau năm 1. Vào lab nghiên cứu năm 2 mới biết: bạn nào có project từ năm 1 sẽ được nhận — bạn nào chưa thì đứng ngoài.</p>
+      </div>
+      <div class="pain-card animate">
+        <div class="pain-emoji">🤖</div>
+        <div class="pain-title">Lúng túng khi dùng AI</div>
+        <p class="pain-desc">Muốn dùng ChatGPT hỗ trợ nhưng toàn ra code sai, càng dùng càng rối.</p>
+      </div>
+      <div class="pain-card animate">
+        <div class="pain-emoji">⏰</div>
+        <div class="pain-title">Lãng phí thời gian hè</div>
+        <p class="pain-desc">Muốn tự học nhưng không có người review code, bí không biết hỏi ai.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution-section">
+  <div class="container">
+    <div class="solution-grid">
+      <div>
+        <div class="tag">BỨT PHÁ KỸ NĂNG CÙNG CODEGYM</div>
+        <h2 class="section-title animate">Hè này, làm chủ C++ và AI để quay lại trường với một tâm thế hoàn toàn mới.</h2>
+        <p class="section-sub">Nắm vững C++ giúp bạn chinh phục các môn "khó nhằn" ở năm 2 như Cấu trúc dữ liệu, Hệ điều hành và OOP dễ dàng hơn.</p>
+        <ul class="solution-list">
+          <li>
+            <div class="sol-icon">🎯</div>
+            <div class="sol-text"><strong>Lộ trình thực chiến</strong><span>Học online, tập trung 100% vào thực hành và dự án thực tế.</span></div>
+          </li>
+          <li>
+            <div class="sol-icon">👨‍💻</div>
+            <div class="sol-text"><strong>Hỗ trợ từ chuyên gia</strong><span>Mentor 1-1 đồng hành, review code chi tiết và hỗ trợ 24/7 khi bí.</span></div>
+          </li>
+          <li>
+            <div class="sol-icon">🤖</div>
+            <div class="sol-text"><strong>Tích hợp AI workflow</strong><span>Học cách dẫn dắt AI (Gemini, ChatGPT) làm việc cho mình thay vì để AI thay thế.</span></div>
+          </li>
+          <li>
+            <div class="sol-icon">💰</div>
+            <div class="sol-text"><strong>Chi phí tối ưu</strong><span>~62.000đ/giờ học — bằng 1 môn học thêm ở trung tâm ngoài.</span></div>
+          </li>
+        </ul>
+        <a href="#dang-ky" class="btn btn-primary">ĐĂNG KÝ NGAY →</a>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card animate">
+          <div class="stat-num">2</div>
+          <div class="stat-label">tháng · vừa đủ trọn 1 mùa hè</div>
+        </div>
+        <div class="stat-card animate">
+          <div class="stat-num">48</div>
+          <div class="stat-label">giờ học thực chiến</div>
+        </div>
+        <div class="stat-card animate">
+          <div class="stat-num">5+</div>
+          <div class="stat-label">dự án thật đưa lên GitHub</div>
+        </div>
+        <div class="stat-card animate">
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">mentor hỗ trợ khi bí code</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section class="curriculum-section">
+  <div class="container">
+    <div class="tag tag--blue">LỘ TRÌNH HỌC</div>
+    <h2 class="section-title animate">13 Module — Từ Tư duy AI đến Dự án Game thực tế</h2>
+    <p class="section-sub">Lộ trình thiết kế tinh gọn giúp bạn đi từ con số 0 đến làm chủ dự án.</p>
+    <div class="module-grid">
+      <div class="module-card highlight animate">
+        <div class="mod-num">Module 01</div>
+        <div class="mod-title">Ứng dụng AI trong học tập</div>
+        <p class="mod-desc">Prompting thông minh, tổng quan AI, NotebookLM, ChatGPT.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 02</div>
+        <div class="mod-title">Nhập môn lập trình</div>
+        <p class="mod-desc">Thuật toán, Flowchart, Pseudo code, tư duy giải thuật.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 03</div>
+        <div class="mod-title">Quản lý mã nguồn với Git</div>
+        <p class="mod-desc">Lệnh Git cơ bản, GitHub flow, push code lên portfolio.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 04</div>
+        <div class="mod-title">Biến, kiểu dữ liệu & toán tử</div>
+        <p class="mod-desc">Cú pháp C++, hàm nhập/xuất, app C++ đầu tiên.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 05</div>
+        <div class="mod-title">Cấu trúc điều kiện</div>
+        <p class="mod-desc">if, if-else, switch-case, bài tập logic thực tế.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 06</div>
+        <div class="mod-title">Cấu trúc lặp</div>
+        <p class="mod-desc">for, while, do/while, break, continue.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 07</div>
+        <div class="mod-title">Mảng</div>
+        <p class="mod-desc">Mảng 1 chiều, đa chiều, duyệt mảng với for.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 08</div>
+        <div class="mod-title">Con trỏ</div>
+        <p class="mod-desc">Khai báo, toán tử & và *, quản lý bộ nhớ động.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 09</div>
+        <div class="mod-title">Hàm</div>
+        <p class="mod-desc">Khai báo, tham số của hàm, câu lệnh return.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 10</div>
+        <div class="mod-title">Lớp & Đối tượng (OOP)</div>
+        <p class="mod-desc">Class, object, method, constructor, mô hình OOP.</p>
+      </div>
+      <div class="module-card animate">
+        <div class="mod-num">Module 11</div>
+        <div class="mod-title">Thuật toán cơ bản</div>
+        <p class="mod-desc">Tìm kiếm, sắp xếp, đệ quy. Dùng AI giải bài logic.</p>
+      </div>
+      <div class="module-card highlight animate">
+        <div class="mod-num">Module 12 – 13</div>
+        <div class="mod-title">Case Study + Nhận chứng chỉ</div>
+        <p class="mod-desc">Cờ ca-rô, Dò mìn, Ai là triệu phú · Push GitHub · Nhận chứng chỉ CodeGym.</p>
+      </div>
+    </div>
+    <div class="curriculum-cta">
+      <p style="font-size:15px;font-weight:700;color:var(--cg-navy);margin-bottom:12px;">👉 Muốn xem lộ trình chi tiết từng module?</p>
+      <a href="https://m.me/codegym.vn" class="btn btn-primary">Nhắn tin nhận lộ trình đầy đủ →</a>
+    </div>
+  </div>
+</section>
+
+<!-- USP -->
+<section class="usp-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="tag">ĐIỂM KHÁC BIỆT</div>
+      <h2 class="section-title animate" style="margin:0 auto">Tại sao nên chọn CodeGym?</h2>
+      <p class="section-sub animate" style="margin:12px auto 0">Tự học miễn phí thì đầy. Nhưng đây là 5 thứ bạn KHÔNG có khi tự học một mình.</p>
+    </div>
+    <div class="usp-grid">
+      <div class="usp-card animate">
+        <div class="usp-icon">🎯</div>
+        <h3>Lộ trình thực tế</h3>
+        <p>Thiết kế tinh gọn, tập trung vào kỹ năng cần thiết để đi làm và qua môn ở trường. Từ AI tool → C++ cơ bản → OOP → thuật toán → dự án.</p>
+      </div>
+      <div class="usp-card animate">
+        <div class="usp-icon">👨‍💻</div>
+        <h3>Hỗ trợ tận tâm 24/7</h3>
+        <p>Mentor 1-1 sẵn sàng gỡ bug và định hướng kỹ thuật suốt quá trình học — kể cả 11h tối khi bạn đang cắm đầu debug.</p>
+      </div>
+      <div class="usp-card animate">
+        <div class="usp-icon">🤖</div>
+        <h3>Tích hợp AI-Native từ ngày 1</h3>
+        <p>Không học C++ kiểu cũ rồi mới "thêm AI vào". Bạn học cách tận dụng AI để tối ưu tốc độ code, đọc tài liệu và debug — chuẩn dev thực chiến.</p>
+      </div>
+      <div class="usp-card animate">
+        <div class="usp-icon">💼</div>
+        <h3>5+ dự án vào portfolio</h3>
+        <p>Xây dựng GitHub ấn tượng với Cờ ca-rô, Dò mìn, app quản lý… sẵn sàng cho kỳ thực tập năm 3, năm 4.</p>
+      </div>
+      <div class="usp-card animate">
+        <div class="usp-icon">🎓</div>
+        <h3>Cam kết học lại miễn phí</h3>
+        <p>Nếu hết khoá mà chưa đạt chuẩn đầu ra, bạn được học lại hoàn toàn miễn phí. Cam kết thực chất, không hứa suông.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUT -->
+<section class="output-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="tag">ĐẦU RA SAU KHOÁ</div>
+      <h2 class="section-title animate" style="margin:0 auto">Sau 2 tháng hè, bạn sẽ đạt được gì?</h2>
+      <p class="section-sub animate" style="margin:12px auto 0">Không phải khẩu hiệu — đây là 3 thứ cụ thể bạn có sau khi học xong.</p>
+    </div>
+    <div class="output-grid">
+      <div class="output-card animate">
+        <div class="out-num">01</div>
+        <div class="out-title">LÀM CHỦ CÔNG NGHỆ</div>
+        <div class="out-sub">Vững tư duy C++ + thành thạo AI tools</div>
+        <ul class="out-list">
+          <li>Nắm chắc C++: biến, vòng lặp, mảng, con trỏ, OOP</li>
+          <li>Thành thạo Gemini, ChatGPT, NotebookLM để code & debug</li>
+          <li>Sử dụng Git/GitHub và VS Code như dev đi làm</li>
+          <li>Biết viết prompt thông minh giải bài toán logic</li>
+        </ul>
+      </div>
+      <div class="output-card animate">
+        <div class="out-num">02</div>
+        <div class="out-title">SỞ HỮU DỰ ÁN THẬT</div>
+        <div class="out-sub">GitHub đẹp với 5+ project thực chiến</div>
+        <ul class="out-list">
+          <li>App Máy tính thông minh, Quản lý công việc</li>
+          <li>Game: Ai là triệu phú, Dò mìn, Cờ ca-rô</li>
+          <li>Mỗi project có README đẹp, sẵn sàng show</li>
+          <li>Portfolio mạnh khi đi xin internship</li>
+        </ul>
+      </div>
+      <div class="output-card animate">
+        <div class="out-num">03</div>
+        <div class="out-title">TỰ TIN HỌC VƯỢT TRỘI</div>
+        <div class="out-sub">Bệ phóng học tiếp dễ hơn rất nhiều</div>
+        <ul class="out-list">
+          <li>Nền C++ vững → Python, Java, .NET nhanh gấp đôi</li>
+          <li>Quen workflow AI → bắt nhịp dev "thế hệ mới"</li>
+          <li>Năm 2 (CTDL, OOP, HĐH) nhẹ hơn hẳn</li>
+          <li>Tự tin học tiếp IoT, lập trình nhúng, AI</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTOR -->
+<section class="mentor-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="tag">ĐỘI NGŨ GIẢNG DẠY</div>
+      <h2 class="section-title animate" style="margin:0 auto">Mentor của bạn — không phải "thầy" mà là người anh trong nghề</h2>
+      <p class="section-sub animate" style="margin:12px auto 0">Đội ngũ CodeGym đều là dev đi làm thực sự. Họ từng qua đúng giai đoạn năm 1 mà bạn đang ở.</p>
+    </div>
+    <div class="mentor-grid">
+      <div class="mentor-card animate">
+        <div class="mentor-icon-wrap">🎓</div>
+        <h3>Giảng viên chuyên môn dày dặn</h3>
+        <p>Giúp "đơn giản hóa" mọi khái niệm khó nhằn (Con trỏ, Thuật toán, OOP), xây dựng tư duy lập trình chuẩn xác ngay từ đầu.</p>
+      </div>
+      <div class="mentor-card animate">
+        <div class="mentor-icon-wrap">💼</div>
+        <h3>Chuyên gia thực chiến từ doanh nghiệp</h3>
+        <p>Truyền đạt kinh nghiệm dự án thực tế, quy trình làm việc chuyên nghiệp và bí quyết tận dụng AI (Gemini, ChatGPT) để tối ưu hiệu suất.</p>
+      </div>
+      <div class="mentor-card animate">
+        <div class="mentor-icon-wrap">🤝</div>
+        <h3>Mentor đồng hành sát sao 1-1</h3>
+        <p>Trực tiếp review code, gỡ lỗi từng dòng và giải đáp mọi thắc mắc — đảm bảo bạn không bao giờ bị "ngợp" hay tụt lại phía sau.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="tag">HỌC VIÊN NÓI GÌ</div>
+      <h2 class="section-title animate" style="margin:0 auto">Họ đã bắt đầu từ con số 0</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card animate">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Mình học hơi chậm nên thích nhất là được hướng dẫn 1-1 lúc làm thực hành. Môi trường xịn, giảng viên nhiệt tình, anh em trong lớp giúp đỡ nhau lúc khó khăn.</p>
+        <div class="testi-author">Học viên CodeGym Hà Nội</div>
+        <div class="testi-role">Sinh viên CNTT, khoá lập trình</div>
+      </div>
+      <div class="testi-card animate">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Chương trình học ở CodeGym đi sâu và chuyên môn, học những thứ thực sự cần thiết. Kiến thức cơ bản: 8/10 — Thực hành: 8/10 — Môi trường + kỹ năng mềm: 9/10.</p>
+        <div class="testi-author">Cựu học viên CodeGym Hà Nội</div>
+        <div class="testi-role">Đang đi làm gần 1 năm</div>
+      </div>
+      <div class="testi-card animate">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Các anh chị giảng viên rất nhiệt tình, có gì vướng mắc là được hướng dẫn, còn chỉ thêm công nghệ mới bên ngoài để tự tìm hiểu. Cơ sở vật chất ổn, môi trường học tốt.</p>
+        <div class="testi-author">Học viên CodeGym Hà Nội</div>
+        <div class="testi-role">Khoá lập trình</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING + FORM -->
+<section class="pricing-section" id="dang-ky">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px">
+      <div class="tag">ĐĂNG KÝ NGAY</div>
+      <h2 class="section-title animate" style="margin:0 auto">Tối ưu mùa hè — Bứt phá tương lai</h2>
+      <p class="section-sub animate" style="margin:12px auto 0">Số lượng học viên mỗi lớp có hạn. Đăng ký sớm để giữ chỗ!</p>
+    </div>
+    <div class="pricing-inner">
+      <!-- Pricing card -->
+      <div class="pricing-card animate">
+        <div class="pricing-badge">
+          <span>🎯 Khoá học hè 2026</span>
+          <span class="badge-pill">⭐ HOT</span>
+        </div>
+        <div class="pricing-body">
+          <div class="pricing-course-name">AI-Native C++ Bootcamp</div>
+          <p class="pricing-tagline">Khoá học online dành cho sinh viên năm nhất — bắt đầu từ con số 0.</p>
+          <div class="pricing-rows">
+            <div class="pricing-row"><span class="p-label">⏱ Thời lượng</span><span class="p-value">2 tháng (48 giờ học thực chiến)</span></div>
+            <div class="pricing-row"><span class="p-label">💻 Hình thức</span><span class="p-value">Online · Live class</span></div>
+            <div class="pricing-row"><span class="p-label">👨‍🏫 Mentor</span><span class="p-value">Hỗ trợ chuyên môn 1-1 trực tiếp</span></div>
+            <div class="pricing-row"><span class="p-label">📅 Khai giảng</span><span class="p-value"><strong>26/05/2026</strong></span></div>
+            <div class="pricing-row"><span class="p-label">💰 Học phí</span><span class="p-value"><strong>~62.000đ/giờ học</strong></span></div>
+            <div class="pricing-row"><span class="p-label">🎓 Cam kết</span><span class="p-value">Học lại MIỄN PHÍ nếu chưa đạt chuẩn</span></div>
+          </div>
+          <div class="pricing-uu">
+            <div class="uu-ribbon">HOT</div>
+            <span class="uu-icon">🎁</span>
+            <div class="uu-label">Ưu đãi sinh viên năm nhất</div>
+            <div class="uu-value">GIẢM 5% HỌC PHÍ</div>
+            <span class="uu-value-sub">Tiết kiệm ngay khi đăng ký sớm</span>
+            <div class="uu-deadline">⏰ Áp dụng đến hết <strong>20/05/2026</strong> · Số lượng có hạn</div>
+          </div>
+          <div class="pricing-cta-group">
+            <a href="#form" class="btn btn-primary form-scroll">ĐĂNG KÝ TƯ VẤN MIỄN PHÍ →</a>
+            <a href="https://m.me/codegym.vn" class="btn btn-outline">💬 Chat Messenger ngay</a>
+          </div>
+          <p class="pricing-cam"><span>✓</span> Tư vấn miễn phí · Không ràng buộc · Phản hồi trong 24h</p>
+        </div>
+      </div>
+
+      <!-- Form (Google Form embed) -->
+      <div class="form-side" id="form">
+        <div class="form-title">Để lại thông tin để được tư vấn</div>
+        <p class="form-sub">Hoặc nhắn trực tiếp Messenger — thường trả lời trong 5 phút giờ hành chính.</p>
+
+        <div class="gform-wrap">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSd1gMm2gknQPZdideD3hcCE6L-16OxWbAzRw_rWYryaz1PYMg/viewform?embedded=true"
+            width="100%"
+            height="900"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            title="Form đăng ký tư vấn CodeGym">
+            Đang tải form...
+          </iframe>
+        </div>
+
+        <p class="form-note" style="margin-top:14px">🔒 Thông tin của bạn được bảo mật. Mentor sẽ liên hệ trong 24h.</p>
+
+        <div style="margin-top:16px;padding:16px;background:var(--cg-soft);border-radius:10px;text-align:center;border:1px dashed var(--cg-border)">
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Cần tư vấn ngay?</p>
+          <a href="https://m.me/codegym.vn" class="btn btn-primary" style="width:100%;justify-content:center">💬 Chat Messenger với mentor →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="tag">CÂU HỎI THƯỜNG GẶP</div>
+      <h2 class="section-title animate" style="margin:0 auto">Câu hỏi của sinh viên năm nhất</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Em là sinh viên năm nhất, chưa từng học code hay biết gì về C++ thì có học được không?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Hoàn toàn được em nhé! Khóa AI-Native C++ không yêu cầu nền tảng lập trình từ trước. Nội dung được thiết kế đặc biệt cho người bắt đầu từ con số 0 — Module 1 còn dạy cách dùng AI để hỗ trợ học hiệu quả. Chỉ cần bật máy tính lên và có Internet là theo được.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Nếu em gặp bài khó và "bí" ý tưởng lúc tự học ở nhà thì ai sẽ hỗ trợ em?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Đừng lo! Em sẽ được tương tác trực tiếp với giảng viên qua các buổi thảo luận trực tuyến. Sau giờ học, mentor vẫn hỗ trợ 24/7 qua kênh chat — bí dòng nào hỏi dòng đó, không cần chờ đến buổi học hôm sau.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Khóa học tích hợp AI như thế nào?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Ngay từ Module 1, em được học cách dùng AI hiện đại (Google Gemini, ChatGPT, NotebookLM…) để hỗ trợ coding: tạo prompt thông minh, ghi chép, tóm tắt nội dung và giải quyết bài toán lập trình. Xuyên suốt khoá, AI là công cụ làm việc — không phải thứ thay thế em.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Học xong làm được gì?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Sau 2 tháng, em tự tay tạo được các ứng dụng thực tế (máy tính, quản lý công việc) và các game như "Ai là triệu phú", "Dò mìn", "Cờ ca-rô". Tất cả đều đẩy lên GitHub — portfolio sẵn sàng cho kỳ xin internship.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Học xong khoá C++ này thì học tiếp gì được?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Đây là bước đệm giúp em dễ dàng chinh phục các ngôn ngữ khác như Java, Python, PHP. Nền C++ vững → tiến sâu hơn vào IoT, lập trình nhúng, AI, phát triển Web/Mobile. Em cũng có thể học tiếp các Bootcamp Fullstack/Backend tại CodeGym khi sẵn sàng.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Tại sao không tự học miễn phí trên YouTube mà phải đóng tiền?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-a">
+          <p>Tự học rất dễ nản khi gặp "bug" không ai gỡ. Với khóa này, em có lộ trình chuẩn, được mentor "cầm tay chỉ việc", có bài tập và dự án thật ngay từ tuần đầu — tiết kiệm hàng tháng tự mò mẫm. Hơn hết, em biết mình đang ở đâu mỗi tuần.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Đừng để mùa hè <em>trôi qua vô ích.</em></h2>
+    <p>Đăng ký nhận tư vấn miễn phí — mentor liên hệ ngay để hỗ trợ lộ trình phù hợp nhất cho bạn.</p>
+    <div class="final-cta-btns">
+      <a href="#dang-ky" class="btn btn-primary" style="font-size:16px;padding:16px 36px">ĐĂNG KÝ TƯ VẤN →</a>
+      <a href="https://m.me/codegym.vn" class="btn btn-white" style="font-size:16px;padding:16px 36px">💬 Chat Messenger</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><span>Code</span><span>Gym</span></div>
+        <p class="footer-desc">Hệ thống đào tạo lập trình AI-Native cho người mới bắt đầu & người chuyển ngành. Hơn 5000 học viên đã tốt nghiệp.</p>
+        <p class="footer-hotline">📞 Hotline: <strong>0989 534 458</strong></p>
+      </div>
+      <div class="footer-col">
+        <h4>Liên hệ</h4>
+        <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,.7);margin-bottom:14px">
+          Căn 23, Lô TT-01, KĐT Mon City,<br>
+          đường Hàm Nghi, Mỹ Đình 2,<br>
+          Nam Từ Liêm, Hà Nội
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Công ty CP CodeGym Việt Nam — MST: 010 810 4526
+    </div>
+  </div>
+</footer>
+
+<!-- FLOAT CTA -->
+<div class="float-cta">
+  <a href="https://m.me/codegym.vn" class="float-btn float-btn-mess">💬 Chat Messenger</a>
+  <a href="#dang-ky" class="float-btn float-btn-primary">Đăng ký ngay →</a>
+</div>
+
+<script>
+// ── FAQ accordion ──
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const ans  = item.querySelector('.faq-a');
+    const isOpen = btn.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-q.open').forEach(b => {
+      b.classList.remove('open');
+      b.closest('.faq-item').querySelector('.faq-a').classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      ans.classList.add('open');
+    }
+  });
+});
+
+// ── Scroll animation ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.animate').forEach(el => obs.observe(el));
+
+// ── Smooth scroll for form ──
+document.querySelectorAll('.form-scroll').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── Form submit handled by Google Form embed ──
+
+// ── Countdown to 20/05/2026 ──
+(function() {
+  var target = new Date('2026-05-20T23:59:59+07:00');
+  function tick() {
+    var diff = target - new Date();
+    if (diff <= 0) { var el = document.querySelector('.hero-countdown'); if (el) el.remove(); return; }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    ['d','h','m','s'].forEach(function(k, i) {
+      var el = document.getElementById('cd-'+k);
+      if (el) el.textContent = String([d,h,m,s][i]).padStart(2,'0');
+    });
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+// ── Hide float CTA when in hero ──
+const hero = document.querySelector('.hero');
+const floatCta = document.querySelector('.float-cta');
+const heroObs = new IntersectionObserver(e => {
+  floatCta.style.opacity = e[0].isIntersecting ? '0' : '1';
+  floatCta.style.pointerEvents = e[0].isIntersecting ? 'none' : 'all';
+}, { threshold: 0.2 });
+heroObs.observe(hero);
+floatCta.style.transition = 'opacity .3s ease';
+</script>
+</body>
+</html>
