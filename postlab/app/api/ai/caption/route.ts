@@ -1,7 +1,7 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(request: Request) {
   try {
@@ -13,8 +13,6 @@ export async function POST(request: Request) {
       professional: 'chuyên nghiệp, đáng tin cậy, thể hiện chuyên môn',
       inspiring: 'truyền cảm hứng, đầy năng lượng, khích lệ hành động',
     }
-
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
     const prompt = `Bạn là content writer chuyên viết caption Facebook cho fanpage trung tâm dạy lập trình tại Việt Nam.
 
@@ -31,8 +29,13 @@ Sau caption, thêm chính xác dòng "---HASHTAGS---" rồi liệt kê 8-10 hash
 
 Chỉ trả về caption và hashtags, không có text giải thích thêm.`
 
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
+    })
+
+    const text = message.content[0].type === 'text' ? message.content[0].text : ''
     const parts = text.split('---HASHTAGS---')
     const caption = parts[0].trim()
     const hashtags = parts[1]?.trim() ?? ''
