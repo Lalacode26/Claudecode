@@ -1,12 +1,14 @@
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!)
 
 export async function POST(request: Request) {
   try {
     const { topic, category } = await request.json()
     if (!topic) return NextResponse.json({ error: 'topic required' }, { status: 400 })
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
     const prompt = `Bạn là content strategist chuyên nghiệp cho fanpage trung tâm dạy lập trình tại Việt Nam.
 
@@ -25,13 +27,8 @@ Yêu cầu:
 - Đa dạng format: list, câu hỏi, câu chuyện, so sánh
 - Chỉ trả về JSON, không có text thêm`
 
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
-    })
-
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const result = await model.generateContent(prompt)
+    const text = result.response.text()
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) throw new Error('Invalid AI response')
 
