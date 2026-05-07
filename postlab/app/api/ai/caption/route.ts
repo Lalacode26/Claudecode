@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       inspiring: 'truyền cảm hứng, đầy năng lượng, khích lệ hành động',
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const prompt = `Bạn là content writer chuyên viết caption Facebook cho fanpage trung tâm dạy lập trình tại Việt Nam.
 
