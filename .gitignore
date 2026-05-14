@@ -1,0 +1,13 @@
+# Claude Code runtime files
+.claude/scheduled_tasks.lock
+.claude/projects/
+
+# Node
+node_modules/
+.next/
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
